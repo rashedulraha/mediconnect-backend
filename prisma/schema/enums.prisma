@@ -16,8 +16,3 @@ enum Gender {
   FEMALE
   OTHER
 }
-
-enum AuthProvider {
-  LOCAL
-  GOOGLE
-}
