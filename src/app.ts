@@ -5,15 +5,19 @@ import httpStatus from "http-status";
 import config from "./app/config";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
 import { notFound } from "./app/middleware/notFound";
-import { AuthRoutes } from "./app/module/auth/auth.route";
+import router from "./app/routes";
 
 const app: Application = express();
 
 app.use(
-  cors({
-    origin: config.frontend_url,
-    credentials: true,
-  }),
+	cors({
+		origin: [
+			config.frontend_url,
+			"http://localhost:3000",
+			"http://localhost:5173",
+		].filter(Boolean) as string[],
+		credentials: true,
+	}),
 );
 
 // Enable URL-encoded form data parsing
@@ -23,16 +27,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/v1/auth", AuthRoutes);
+// Application API routes
+app.use("/api/v1", router);
 
-// Basic route
-app.get("/", async (req: Request, res: Response) => {
-  res.status(httpStatus.OK).json({
-    success: true,
-    message: "Welcome to Mediconnect healthcare system",
-  });
+// Root health check route
+app.get("/", (_req: Request, res: Response) => {
+	res.status(httpStatus.OK).json({
+		success: true,
+		statusCode: httpStatus.OK,
+		message: "Welcome to MediConnect Healthcare System API",
+	});
 });
 
+// Error handling middlewares
 app.use(globalErrorHandler);
 app.use(notFound);
 
