@@ -1,10 +1,8 @@
 model User {
   id                 String     @id @default(uuid())
   name               String
-  email              String
-  password           String?
-  googleId           String?    @unique
-  authProvider       AuthProvider @default(LOCAL)
+  email              String     @unique
+  password           String
   emailVerified      Boolean    @default(false)
   role               Role       @default(PATIENT)
   status             UserStatus @default(ACTIVE)
@@ -15,6 +13,5 @@ model User {
   updatedAt          DateTime   @updatedAt
   patient            Patient?
 
-  @@unique([email])
   @@map("users")
 }
