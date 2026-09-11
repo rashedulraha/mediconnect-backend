@@ -1,39 +1,44 @@
 import app from "./app";
 import config from "./app/config";
+import { transporter } from "./app/lib/nodeMailer";
 import { prisma } from "./app/lib/prisma";
 import { redisClient } from "./app/lib/redis";
 import {
-	seedSuperAdmin,
-	seedTesterAdmin,
-	seedTesterDoctor,
+  seedSuperAdmin,
+  seedTesterAdmin,
+  seedTesterDoctor,
 } from "./app/utils/seed";
 
 const PORT = config.port;
 
 const main = async () => {
-	try {
-		// * prisma connect
-		await prisma.$connect();
-		console.log("Connected to the database successfully!");
+  try {
+    // * prisma connect
+    await prisma.$connect();
+    console.log("Connected to the database successfully!");
 
-		//* redis connection
-		await redisClient.connect();
-		console.log("Redis connect successfully!");
+    //* redis connection
+    await redisClient.connect();
+    console.log("Redis connect successfully!");
 
-		await seedSuperAdmin();
-		await seedTesterAdmin();
-		await seedTesterDoctor();
+    // connect node mailer
+    await transporter.verify();
+    console.log("node mailer connection successfully");
 
-		console.log("seeding data in database successfully!");
+    await seedSuperAdmin();
+    await seedTesterAdmin();
+    await seedTesterDoctor();
 
-		app.listen(PORT, () => {
-			console.log(`Server is running on port ${PORT}`);
-		});
-	} catch (error) {
-		console.error("Error starting the server:", error);
-		await prisma.$disconnect();
-		process.exit(1);
-	}
+    console.log("seeding data in database successfully!");
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error starting the server:", error);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
 };
 
 main();
