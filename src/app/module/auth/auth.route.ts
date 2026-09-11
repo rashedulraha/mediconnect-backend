@@ -8,39 +8,48 @@ import { AuthValidation } from "./auth.validation";
 const router = Router();
 
 router.post(
-	"/register",
-	validateRequest(AuthValidation.registerPatientValidationSchema),
-	AuthController.registerPatient,
+  "/register",
+  validateRequest(AuthValidation.registerPatientValidationSchema),
+  AuthController.registerPatient,
 );
+router.post("/verify-email", AuthController.verifyEmail);
 
 router.post(
-	"/login",
-	validateRequest(AuthValidation.loginValidationSchema),
-	AuthController.loginUser,
+  "/login",
+  validateRequest(AuthValidation.loginValidationSchema),
+  AuthController.loginUser,
 );
 
 router.post("/refresh-token", AuthController.refreshToken);
 
 router.post(
-	"/change-password",
-	auth(Role.ADMIN, Role.DOCTOR, Role.PATIENT, Role.SUPER_ADMIN),
-	validateRequest(AuthValidation.changePasswordValidationSchema),
-	AuthController.changePassword,
+  "/change-password",
+  auth(Role.ADMIN, Role.DOCTOR, Role.PATIENT, Role.SUPER_ADMIN),
+  validateRequest(AuthValidation.changePasswordValidationSchema),
+  AuthController.changePassword,
 );
 
 router.post(
-	"/logout",
-	auth(Role.ADMIN, Role.DOCTOR, Role.PATIENT, Role.SUPER_ADMIN),
-	AuthController.logout,
+  "/logout",
+  auth(Role.ADMIN, Role.DOCTOR, Role.PATIENT, Role.SUPER_ADMIN),
+  AuthController.logout,
 );
 
 router.get(
-	"/me",
-	auth(Role.ADMIN, Role.DOCTOR, Role.PATIENT, Role.SUPER_ADMIN),
-	AuthController.getMe,
+  "/me",
+  auth(Role.ADMIN, Role.DOCTOR, Role.PATIENT, Role.SUPER_ADMIN),
+  AuthController.getMe,
 );
 
-router.post("/forgot-password", AuthController.forgotPassword);
-router.post("/reset-password", AuthController.resetPassword);
+router.post(
+  "/forgot-password",
+  validateRequest(AuthValidation.forgotPasswordValidationSchema),
+  AuthController.forgotPassword,
+);
+router.post(
+  "/reset-password",
+  validateRequest(AuthValidation.resetPasswordValidationSchema),
+  AuthController.resetPassword,
+);
 
 export const AuthRoutes = router;
