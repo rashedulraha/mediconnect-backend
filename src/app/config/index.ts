@@ -1,55 +1,79 @@
 import dotenv from "dotenv";
 import path from "path";
-import { env } from "prisma/config";
-import { RedisClient } from "redis";
+import { envSchems } from "./index.validation";
+
 
 dotenv.config({ path: path.join(process.cwd(), ".env") });
 
+
+
+const validationResult = envSchems.safeParse(process.env);
+
+if (!validationResult.success) {
+  console.error("❌ Environment variable validation error:", validationResult.error.format());
+  process.exit(1);
+}
+
+const env = validationResult.data;
+
 export default {
-  node_env: process.env.NODE_ENV || "development",
-  port: process.env.PORT || 5000,
-  database_url: process.env.DATABASE_URL,
-  backend_url: process.env.BACKEND_URL || "http://localhost:5000",
-  frontend_url: process.env.FRONTEND_URL || "http://localhost:3000",
-  bcrypt_salt_rounds: Number(process.env.BCRYPT_SALT_ROUNDS) || 10,
-  jwt_access_secret: process.env.JWT_ACCESS_SECRET || "default_access_secret",
-  jwt_refresh_secret:
-    process.env.JWT_REFRESH_SECRET || "default_refresh_secret",
-  jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN || "1d",
-  jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
-  super_admin_name: process.env.SUPER_ADMIN_NAME,
-  super_admin_email: process.env.SUPER_ADMIN_EMAIL,
-  super_admin_password: process.env.SUPER_ADMIN_PASSWORD,
+  nodeEnv: env.NODE_ENV,
+  port: Number(env.PORT),
+  databaseUrl: env.DATABASE_URL,
+  backendUrl: env.BACKEND_URL,
+  frontendUrl: env.FRONTEND_URL,
+  bcryptSaltRounds: Number(env.BCRYPT_SALT_ROUNDS),
 
-  tester_admin_name: process.env.TESTER_ADMIN_NAME,
-  tester_admin_email: process.env.TESTER_ADMIN_EMAIL,
-  tester_admin_password: process.env.TESTER_ADMIN_PASSWORD,
+  jwt: {
+    accessSecret: env.JWT_ACCESS_SECRET,
+    refreshSecret: env.JWT_REFRESH_SECRET,
+    accessExpiresIn: env.JWT_ACCESS_EXPIRES_IN,
+    refreshExpiresIn: env.JWT_REFRESH_EXPIRES_IN,
+  },
 
-  tester_doctor_name: process.env.TESTER_DOCTOR_NAME,
-  tester_doctor_email: process.env.TESTER_DOCTOR_EMAIL,
-  tester_doctor_password: process.env.TESTER_DOCTOR_PASSWORD,
-  // REDIS CONFIGURATION
-  redis_user: process.env.REDIS_USER,
-  redis_password: process.env.REDIS_PASSWORD,
-  redis_host: process.env.REDIS_HOST,
-  redis_port: process.env.REDIS_PORT,
+  superAdmin: {
+    name: env.SUPER_ADMIN_NAME,
+    email: env.SUPER_ADMIN_EMAIL,
+    password: env.SUPER_ADMIN_PASSWORD,
+  },
 
-  // smtp
-  smtp_user: process.env.SMTP_USER!,
-  smtp_password: process.env.SMTP_PASSWORD!,
-  email_sender: process.env.EMAIL_SENDER!,
+  testerAdmin: {
+    name: env.TESTER_ADMIN_NAME,
+    email: env.TESTER_ADMIN_EMAIL,
+    password: env.TESTER_ADMIN_PASSWORD,
+  },
 
-  // Cloudinary  config
-  CLOUDINARY_NAME: process.env.CLOUDINARY_CLAUDE_NAME!,
-  CLOUDINARY_KEY: process.env.CLOUDINARY_API_KAY!,
-  CLOUDINARY_SECRET: process.env.CLOUDINARY_API_SECRET!,
+  testerDoctor: {
+    name: env.TESTER_DOCTOR_NAME,
+    email: env.TESTER_DOCTOR_EMAIL,
+    password: env.TESTER_DOCTOR_PASSWORD,
+  },
 
-  //   BKASH CONFIGURATION
+  redis: {
+    user: env.REDIS_USER,
+    password: env.REDIS_PASSWORD,
+    host: env.REDIS_HOST,
+    port: env.REDIS_PORT,
+  },
 
-  BKASH_SANDBOX_BASE_URL: process.env.BKASH_SANDBOX_BASE_URL!,
-  BKASH_USERNAME: process.env.BKASH_USERNAME!,
-  BKASH_PASSWORD: process.env.BKASH_PASSWORD!,
-  BKASH_APP_KEY: process.env.BKASH_APP_KEY!,
-  BKASH_APP_SECRET: process.env.BKASH_APP_SECRET!,
-  BKASH_CALLBACK_URL: process.env.BKASH_CALLBACK_URL!,
+  smtp: {
+    user: env.SMTP_USER,
+    password: env.SMTP_PASSWORD,
+    emailSender: env.EMAIL_SENDER,
+  },
+
+  cloudinary: {
+    cloudName: env.CLOUDINARY_CLOUD_NAME,
+    apiKey: env.CLOUDINARY_API_KEY,
+    apiSecret: env.CLOUDINARY_API_SECRET,
+  },
+
+  bkash: {
+    sandboxBaseUrl: env.BKASH_SANDBOX_BASE_URL,
+    username: env.BKASH_USERNAME,
+    password: env.BKASH_PASSWORD,
+    appKey: env.BKASH_APP_KEY,
+    appSecret: env.BKASH_APP_SECRET,
+    callbackUrl: env.BKASH_CALLBACK_URL,
+  },
 };
