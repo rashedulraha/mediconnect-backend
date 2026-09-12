@@ -14,20 +14,20 @@ const bookAppointment = async () => {
   }
 
   const bkashCreatePaymentResponse = await fetch(
-    `${config.BKASH_SANDBOX_BASE_URL}/tokenized/checkout/create`,
+    `${config.bkash.sandboxBaseUrl}/tokenized/checkout/create`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: bkashIdToken,
-        "X-App-Key": config.BKASH_APP_KEY,
+        "X-App-Key": config.bkash.appKey as string,
       },
       body: JSON.stringify({
         //agreementID: "TokenizedMerchant01L3IKB6H1565072174986", // appointment id
         mode: "0011",
         payerReference: "01723888888", // user email and phone
-        callbackURL: `${config.BKASH_CALLBACK_URL}/appointment/book-appointment/payment/callback`,
+        callbackURL: `${config.bkash.callbackUrl}/appointment/book-appointment/payment/callback`,
         merchantAssociationInfo: "MI05MID54RF09123456One",
         amount: "1200",
         currency: "BDT",
@@ -64,14 +64,14 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
 
   // execute payment
   const executePayment = await fetch(
-    `${config.BKASH_SANDBOX_BASE_URL}/tokenized/checkout/execute`,
+    `${config.bkash.sandboxBaseUrl}/tokenized/checkout/execute`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: bkashGrantToken,
-        "X-App-Key": config.BKASH_APP_KEY,
+        "X-App-Key": config.bkash.appKey as string,
       },
       body: JSON.stringify({
         paymentID: paymentId,
@@ -85,7 +85,7 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
   if (status === "success") {
     return {
       executedPaymentResult,
-      redirectURL: `${config.frontend_url}/dashboard/my-appointments?status=success`,
+      redirectURL: `${config.frontendUrl}/dashboard/my-appointments?status=success`,
     };
   }
 
@@ -93,7 +93,7 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
   if (status === "failure") {
     return {
       executedPaymentResult,
-      redirectURL: `${config.frontend_url}/dashboard/my-appointments?status=failure`,
+      redirectURL: `${config.frontendUrl}/dashboard/my-appointments?status=failure`,
     };
   }
 
@@ -101,7 +101,7 @@ const bookAppointmentCallback = async (query: Record<string, any>) => {
   if (status === "cancel") {
     return {
       executedPaymentResult,
-      redirectURL: `${config.frontend_url}/dashboard/my-appointments`,
+      redirectURL: `${config.frontendUrl}/dashboard/my-appointments`,
     };
   }
 
