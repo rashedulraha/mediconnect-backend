@@ -43,7 +43,7 @@ export const auth = (...requiredRoles: Role[]) => {
 
 			let verifiedToken: JwtPayload;
 			try {
-				verifiedToken = jwtUtils.verifyToken(token, config.jwt_access_secret);
+				verifiedToken = jwtUtils.verifyToken(token, config.jwt.accessSecret);
 			} catch {
 				throw new AppError(
 					httpStatus.UNAUTHORIZED,

@@ -16,7 +16,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
 	res,
 	_next,
 ) => {
-	if (config.node_env === "development") {
+	if (config.nodeEnv === "development") {
 		console.error("Global Error Handler:", err);
 	}
 
@@ -149,7 +149,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
 		statusCode,
 		message,
 		errorSources: errorSources.length > 0 ? errorSources : undefined,
-		error: config.node_env === "development" ? err : undefined,
-		stack: config.node_env === "development" ? err.stack : undefined,
+		error: config.nodeEnv === "development" ? err : undefined,
+		stack: config.nodeEnv === "development" ? err.stack : undefined,
 	});
 };
