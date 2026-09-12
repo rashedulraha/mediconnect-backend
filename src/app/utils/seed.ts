@@ -17,9 +17,9 @@ export const seedSuperAdmin = async () => {
       return;
     }
 
-    const name = config.super_admin_name;
-    const email = config.super_admin_email;
-    const password = config.super_admin_password;
+    const name = config.superAdmin.name;
+    const email = config.superAdmin.email;
+    const password = config.superAdmin.password;
 
     if (!name || !email || !password) {
       throw new Error("Super admin name,email,password missing");
@@ -28,7 +28,7 @@ export const seedSuperAdmin = async () => {
     // hash password
     const hashedPassword = await bcrypt.hash(
       password,
-      config.bcrypt_salt_rounds,
+      config.bcryptSaltRounds,
     );
 
     // create super admin
@@ -55,7 +55,7 @@ export const seedTesterAdmin = async () => {
   try {
     const isTesterAdminExist = await prisma.user.findUnique({
       where: {
-        email: config.tester_admin_email,
+        email: config.testerAdmin.email,
       },
     });
 
@@ -64,9 +64,9 @@ export const seedTesterAdmin = async () => {
       return;
     }
 
-    const name = config.tester_admin_name;
-    const email = config.tester_admin_email;
-    const password = config.tester_admin_password;
+    const name = config.testerAdmin.name;
+    const email = config.testerAdmin.email;
+    const password = config.testerAdmin.password;
 
     if (!name || !email || !password) {
       throw new Error("tester admin name,email,password missing");
@@ -75,7 +75,7 @@ export const seedTesterAdmin = async () => {
     // hash password
     const hashedPassword = await bcrypt.hash(
       password,
-      config.bcrypt_salt_rounds,
+      config.bcryptSaltRounds,
     );
 
     // create super admin
@@ -103,7 +103,7 @@ export const seedTesterDoctor = async () => {
   try {
     const isTesterDoctorExist = await prisma.user.findUnique({
       where: {
-        email: config.tester_doctor_email,
+        email: config.testerDoctor.email,
       },
     });
 
@@ -112,9 +112,9 @@ export const seedTesterDoctor = async () => {
       return;
     }
 
-    const name = config.tester_doctor_name;
-    const email = config.tester_doctor_email;
-    const password = config.tester_doctor_password;
+    const name = config.testerDoctor.name;
+    const email = config.testerDoctor.email;
+    const password = config.testerDoctor.password;
 
     if (!name || !email || !password) {
       throw new Error("tester doctor name,email,password missing");
@@ -123,7 +123,7 @@ export const seedTesterDoctor = async () => {
     // hash password
     const hashedPassword = await bcrypt.hash(
       password,
-      config.bcrypt_salt_rounds,
+      config.bcryptSaltRounds,
     );
 
     // create super admin
