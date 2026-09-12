@@ -7,7 +7,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import { IRequestUser } from "./auth.interface";
 import { AuthService } from "./auth.service";
 
-const isProduction = config.node_env === "production";
+const isProduction = config.nodeEnv === "production";
 
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;

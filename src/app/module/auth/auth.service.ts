@@ -41,7 +41,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
 
   const hashedPassword = await bcrypt.hash(
     password,
-    Number(config.bcrypt_salt_rounds) || 10,
+    config.bcryptSaltRounds || 10,
   );
 
   const otpValue = crypto.randomInt(100000, 1000000).toString();
@@ -71,7 +71,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
   );
 
   await transporter.sendMail({
-    from: config.email_sender,
+    from: config.smtp.emailSender,
     to: email,
     subject: "Forgot Password - OTP Verification",
     // text: `Your OTP is ${otp} `,
@@ -169,19 +169,19 @@ const verifyPatientEmail = async (payload: VerifyPatientEmailPayloadT) => {
 
   const accessToken = jwtUtils.createToken(
     jwtPayload,
-    config.jwt_access_secret,
-    config.jwt_access_expires_in,
+    config.jwt.accessSecret,
+    config.jwt.accessExpiresIn,
   );
 
   const refreshToken = jwtUtils.createToken(
     jwtPayload,
-    config.jwt_refresh_secret,
-    config.jwt_refresh_expires_in,
+    config.jwt.refreshSecret,
+    config.jwt.refreshExpiresIn,
   );
 
   // send welcome email
   await transporter.sendMail({
-    from: config.email_sender,
+    from: config.smtp.emailSender,
     to: email,
     subject: "Welcome to our platform",
     // text: `Your OTP is ${otp} `,
@@ -240,14 +240,14 @@ const loginUser = async (payload: ILoginUserPayload) => {
 
   const accessToken = jwtUtils.createToken(
     jwtPayload,
-    config.jwt_access_secret,
-    config.jwt_access_expires_in,
+    config.jwt.accessSecret,
+    config.jwt.accessExpiresIn,
   );
 
   const refreshToken = jwtUtils.createToken(
     jwtPayload,
-    config.jwt_refresh_secret,
-    config.jwt_refresh_expires_in,
+    config.jwt.refreshSecret,
+    config.jwt.refreshExpiresIn,
   );
 
   const { password: _, ...userWithoutPassword } = user;
@@ -290,7 +290,7 @@ const refreshToken = async (token: string) => {
   let decoded: JwtPayload;
 
   try {
-    decoded = jwtUtils.verifyToken(token, config.jwt_refresh_secret);
+    decoded = jwtUtils.verifyToken(token, config.jwt.refreshSecret);
   } catch {
     throw new AppError(
       httpStatus.UNAUTHORIZED,
@@ -318,14 +318,14 @@ const refreshToken = async (token: string) => {
 
   const accessToken = jwtUtils.createToken(
     jwtPayload,
-    config.jwt_access_secret,
-    config.jwt_access_expires_in,
+    config.jwt.accessSecret,
+    config.jwt.accessExpiresIn,
   );
 
   const newRefreshToken = jwtUtils.createToken(
     jwtPayload,
-    config.jwt_refresh_secret,
-    config.jwt_refresh_expires_in,
+    config.jwt.refreshSecret,
+    config.jwt.refreshExpiresIn,
   );
 
   return {
@@ -362,7 +362,7 @@ const changePassword = async (
 
   const hashedPassword = await bcrypt.hash(
     newPassword,
-    Number(config.bcrypt_salt_rounds) || 10,
+    config.bcryptSaltRounds || 10,
   );
 
   await prisma.user.update({
@@ -403,7 +403,7 @@ const forgotPassword = async (payload: IForgotPassword) => {
   });
 
   await transporter.sendMail({
-    from: config.email_sender,
+    from: config.smtp.emailSender,
     to: isUserExists.email,
     subject: "Forgot Password - OTP Verification",
     // text: `Your OTP is ${otp} `,
@@ -444,7 +444,7 @@ const resetPassword = async (payload: IResetPassword) => {
 
   const hashedPassword = await bcrypt.hash(
     newPassword,
-    Number(config.bcrypt_salt_rounds) || 10,
+    config.bcryptSaltRounds || 10,
   );
 
   // update user
@@ -459,7 +459,7 @@ const resetPassword = async (payload: IResetPassword) => {
 
   await redisClient.del(key);
   await transporter.sendMail({
-    from: config.email_sender,
+    from: config.smtp.emailSender,
     to: isUserExists.email,
     subject: "You password changed successfully. try login",
     // text: `Your OTP is ${otp} `,
