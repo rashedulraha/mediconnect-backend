@@ -17,7 +17,7 @@ const app: Application = express();
 app.use(
   cors({
     origin: [
-      config.frontend_url,
+      config.frontendUrl,
       "http://localhost:3000",
       "http://localhost:5173",
     ].filter(Boolean) as string[],
