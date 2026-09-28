@@ -57,3 +57,73 @@ enum DoctorVerificationStatus {
   REJECTED
 }
 ```
+
+---
+
+## 3. Endpoints & Workflows
+
+### 3.1 Apply as Doctor
+- **Method**: `POST`
+- **Path**: `/api/v1/doctor/apply-as-doctor`
+- **Content-Type**: `multipart/form-data`
+- **Access**: Public
+
+#### Form Fields:
+- `data`: JSON string matching `ApplyAsDoctorValidationZodSchema`
+  ```json
+  {
+    "user": {
+      "name": "Dr. John Doe",
+      "email": "dr.john@example.com"
+    },
+    "doctor": {
+      "specialization": "Cardiology",
+      "licenseNumber": "MED-123456",
+      "qualifications": "MBBS, FCPS (Cardiology)",
+      "experienceYears": 8,
+      "bio": "Specialist cardiologist with 8 years of clinical experience.",
+      "consultationFee": 1200,
+      "contactNumber": "+8801700000000",
+      "address": "Dhaka, Bangladesh"
+    }
+  }
+  ```
+- `resume`: File (`maxCount: 1`) - PDF or document.
+- `additionalFiles`: Files (`maxCount: 10`) - Certifications, medical degrees, awards.
+
+#### Response:
+```json
+{
+  "statusCode": 200,
+  "success": true,
+  "message": "Applied As Doctor Successfully",
+  "data": { ... }
+}
+```
+
+---
+
+### 3.2 Verify Doctor Email
+- **Method**: `POST`
+- **Path**: `/api/v1/doctor/apply-as-doctor/verify-email`
+- **Content-Type**: `application/json`
+- **Access**: Public
+
+#### Request Body:
+```json
+{
+  "email": "dr.john@example.com",
+  "otp": "123456"
+}
+```
+
+#### Response:
+```json
+{
+  "statusCode": 200,
+  "success": true,
+  "message": "Doctor Email Verified Successfully",
+  "data": { ... }
+}
+```
+
