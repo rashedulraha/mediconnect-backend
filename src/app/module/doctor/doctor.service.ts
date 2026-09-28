@@ -11,19 +11,18 @@ import {
 
 import { DoctorWhereInput } from "../../../generated/prisma/models";
 import config from "../../config";
+import AppError from "../../errors/AppError";
 import { IQuery } from "../../interfaces";
 import { cloudinary } from "../../lib/claudinary";
 import { transporter } from "../../lib/nodeMailer";
 import { prisma } from "../../lib/prisma";
 import { redisClient } from "../../lib/redis";
 import { RequestUser } from "../../middleware/checkAuth";
-
 import {
   IApplyAsDoctorPayload,
   IApproveDoctorPayload,
   IVerifyDoctorEmailPayload,
 } from "./doctor.interface";
-import AppError from "../../errors/AppError";
 
 const applyAsDoctor = async (
   payload: IApplyAsDoctorPayload,
