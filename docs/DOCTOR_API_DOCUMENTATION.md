@@ -127,3 +127,66 @@ enum DoctorVerificationStatus {
 }
 ```
 
+---
+
+### 3.3 Approve / Reject Doctor Application
+- **Method**: `POST`
+- **Path**: `/api/v1/doctor/approve-doctor`
+- **Content-Type**: `application/json`
+- **Access**: `ADMIN`, `SUPER_ADMIN`
+- **Headers**: `Authorization: Bearer <ADMIN_TOKEN>`
+
+#### Request Body (Approve):
+```json
+{
+  "doctorId": "uuid-doctor-id",
+  "verificationStatus": "APPROVED"
+}
+```
+
+#### Request Body (Reject):
+```json
+{
+  "doctorId": "uuid-doctor-id",
+  "verificationStatus": "REJECTED",
+  "rejectionReason": "Missing verified medical board credentials."
+}
+```
+
+#### Response:
+```json
+{
+  "statusCode": 200,
+  "success": true,
+  "message": "Doctor Application Reviewed Successfully",
+  "data": { ... }
+}
+```
+
+---
+
+### 3.4 Get All Doctors (Paginated & Filtered)
+- **Method**: `GET`
+- **Path**: `/api/v1/doctor/all-doctors`
+- **Access**: `ADMIN`, `SUPER_ADMIN`
+- **Headers**: `Authorization: Bearer <ADMIN_TOKEN>`
+
+#### Query Parameters:
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `page` | `number` | `1` | Page number |
+| `limit` | `number` | `10` | Records per page |
+| `sortBy` | `string` | `"createdAt"` | Sorting attribute |
+| `sortOrder` | `"asc" \| "desc"` | `"desc"` | Sort direction |
+| `searchTerm` | `string` | - | Search by name, email, specialization, license |
+| `specialization` | `string` | - | Filter by exact specialization |
+| `licenseNumber` | `string` | - | Filter by license number |
+| `verificationStatus` | `string` | - | Filter by `PENDING`, `APPROVED`, `REJECTED` |
+
+#### Example cURL:
+```bash
+curl -X GET "http://localhost:5000/api/v1/doctor/all-doctors?page=1&limit=10&searchTerm=cardio" \
+  -H "Authorization: Bearer YOUR_ADMIN_TOKEN"
+```
+
+
