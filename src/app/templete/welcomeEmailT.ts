@@ -1,5 +1,5 @@
 export const welcomeEmailT = (name: string) => {
-	return `
+  return `
     <!DOCTYPE html>
     <html lang="en">
       <head>

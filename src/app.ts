@@ -16,14 +16,14 @@ import { DoctorRoutes } from "./app/module/doctor/doctor.route";
 const app: Application = express();
 
 app.use(
-	cors({
-		origin: [
-			config.frontendUrl,
-			"http://localhost:3000",
-			"http://localhost:5173",
-		].filter(Boolean) as string[],
-		credentials: true,
-	}),
+  cors({
+    origin: [
+      config.frontendUrl,
+      "http://localhost:3000",
+      "http://localhost:5173",
+    ].filter(Boolean) as string[],
+    credentials: true,
+  }),
 );
 
 // Enable URL-encoded form data parsing
@@ -47,28 +47,28 @@ app.use("/api/v1/doctor", DoctorRoutes);
 
 // test route
 app.get("/test", async (req: Request, res: Response, next: NextFunction) => {
-	try {
-		const result = await getBkashIdToken();
-		console.log(result);
+  try {
+    const result = await getBkashIdToken();
+    console.log(result);
 
-		res.status(httpStatus.OK).json({
-			message: "test route is working",
-			data: result,
-			statusCode: httpStatus.OK,
-		});
-	} catch (error) {
-		const e = error as Error;
-		console.log(e);
-	}
+    res.status(httpStatus.OK).json({
+      message: "test route is working",
+      data: result,
+      statusCode: httpStatus.OK,
+    });
+  } catch (error) {
+    const e = error as Error;
+    console.log(e);
+  }
 });
 
 // Root health check route
 app.get("/", (_req: Request, res: Response) => {
-	res.status(httpStatus.OK).json({
-		success: true,
-		statusCode: httpStatus.OK,
-		message: "Welcome to MediConnect Healthcare System API",
-	});
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Welcome to MediConnect Healthcare System API",
+  });
 });
 
 // Error handling middlewares
