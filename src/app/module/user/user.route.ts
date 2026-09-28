@@ -7,10 +7,10 @@ import { Role } from "../../../generated/prisma/browser";
 const router = Router();
 
 router.patch(
-  "/profile-img",
-  auth(Role.ADMIN, Role.DOCTOR, Role.PATIENT, Role.SUPER_ADMIN),
-  upload.single("profile-img"),
-  userController.uploadProfileImg,
+	"/profile-img",
+	auth(Role.ADMIN, Role.DOCTOR, Role.PATIENT, Role.SUPER_ADMIN),
+	upload.single("profile-img"),
+	userController.uploadProfileImg,
 );
 
 // export user routers
